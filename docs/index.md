@@ -9,20 +9,16 @@ I am a keen programmer and, as my research tends to be computational in nature, 
 This includes many useful libraries, such as *NumPy*, *SciPy*, *pandas* and *matplotlib*.
 
 ## **Python**
-#### [Computer Science Problems](https://github.com/adamcallison/ComputerScienceProblems)
-
+[Computer Science Problems](https://github.com/adamcallison/ComputerScienceProblems)  
 An in-progress repo in which I am completing the exercises from David Kopec's *Classic Computer Science Problems in Python*
 
-#### [QAOAtools](https://github.com/adamcallison/qaoatools)
-
+[QAOAtools](https://github.com/adamcallison/qaoatools)  
 A work-in-progress set of tools for simulating the Quantum Approximate Optimization Algorithm at an abstract level
 
-#### [QAE2](https://github.com/adamcallison/qae2)
-
+[QAE2](https://github.com/adamcallison/qae2)  
 A work-in-progress set of tools for simulating the Maximum-Likelihood Quantum Amplitudes Estimation at an abstract level
 
-#### [More](https://github.com/adamcallison)
-
+[More](https://github.com/adamcallison)  
 My GitHub is available at [https://github.com/adamcallison](https://github.com/adamcallison)
 
 ## **Academic Publications**
