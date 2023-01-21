@@ -1,0 +1,18 @@
+site_name: Adam Callison
+site_url: https://www.adamcallison.com
+
+nav:
+    - Home: index.md
+    - Publications: publications.md
+    - CV: cv.md
+    
+theme:
+    name: material
+    favicon: images/favicon.ico
+    logo: images/favicon.ico
+    palette:
+        primary: red
+
+markdown_extensions:
+  - attr_list
+  - md_in_html
