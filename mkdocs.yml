@@ -1,10 +1,12 @@
-site_name: Personal website for Adam Callison
+site_name: Adam Callison - Personal website
 site_url: https://www.adamcallison.com
 
 nav:
     - Home: index.md
     - Publications: publications.md
     - CV: cv.md
+
+page.meta.title: test
     
 theme:
     name: material

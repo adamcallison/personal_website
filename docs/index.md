@@ -25,5 +25,9 @@ My GitHub is available at [https://github.com/adamcallison](https://github.com/a
 
 I have a number of academic publications. See my [publications page](publications) for a full list.
 
+## **Currently Reading**
+* *A Song of Ice and Fire: A Clash of Kings* - George R. R. Martin
+* *Classic Computer Science Problems in Python* - David Kopec
+
 ## **Links**
 [<img src="images/github.png" alt="github link", width=50>](https://github.com/adamcallison) [<img src="images/linkedin.png" alt="linkedin link", width=50>](https://www.linkedin.com/in/adam-callison-36598319b/)
