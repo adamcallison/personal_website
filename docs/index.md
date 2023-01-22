@@ -31,3 +31,4 @@ I have a number of academic publications. See my [publications page](publication
 
 ## **Links**
 [<img src="images/github.png" alt="github link", width=50>](https://github.com/adamcallison) [<img src="images/linkedin.png" alt="linkedin link", width=50>](https://www.linkedin.com/in/adam-callison-36598319b/)
+
