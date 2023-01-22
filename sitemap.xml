@@ -6,12 +6,22 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://www.adamcallison.com/blogs/</loc>
+         <lastmod>2023-01-22</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://www.adamcallison.com/cv/</loc>
          <lastmod>2023-01-22</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.adamcallison.com/publications/</loc>
+         <lastmod>2023-01-22</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.adamcallison.com/blog/hanoi/</loc>
          <lastmod>2023-01-22</lastmod>
          <changefreq>daily</changefreq>
     </url>

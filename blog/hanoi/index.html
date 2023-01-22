@@ -1,0 +1,485 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Some thoughts about solving the Tower of Hanoi puzzle in Python, and how to convert the standard recursive solution into a non-recursive one.">
+      
+      
+      
+        <link rel="canonical" href="https://www.adamcallison.com/blog/hanoi/">
+      
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.6">
+    
+    
+      
+        <title>De-recursing the Tower of Hanoi Solver - Adam Callison</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.558e4712.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#de-recursing-the-tower-of-hanoi-solver" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Adam Callison" class="md-header__button md-logo" aria-label="Adam Callison" data-md-component="logo">
+      
+  <img src="../../images/favicon.ico" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Adam Callison
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              De-recursing the Tower of Hanoi Solver
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Adam Callison" class="md-nav__button md-logo" aria-label="Adam Callison" data-md-component="logo">
+      
+  <img src="../../images/favicon.ico" alt="logo">
+
+    </a>
+    Adam Callison
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blogs/" class="md-nav__link">
+        Blog
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../publications/" class="md-nav__link">
+        Publications
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cv/" class="md-nav__link">
+        CV
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="de-recursing-the-tower-of-hanoi-solver">De-recursing the Tower of Hanoi Solver</h1>
+<p>In the first chapter of David Kopec's <em>Classic Computer Science Problems in Python</em>, we are presented with a very standard recursive solver for the <a href="https://en.wikipedia.org/wiki/Tower_of_Hanoi">Tower of Hanoi</a> puzzle.</p>
+<p>The puzzle involves 3 towers (let's call them <span class="arithmatex">\(A\)</span>, <span class="arithmatex">\(B\)</span> and <span class="arithmatex">\(C\)</span>) and a collection of <span class="arithmatex">\(n\)</span> disks of distinct sizes. 
+The puzzle starts with all <span class="arithmatex">\(n\)</span> disks stacked on tower <span class="arithmatex">\(A\)</span> in size order, with the largest disk at the bottom and the stack and the smallest disk at the top. 
+The goal is to perform a series of moves to move the entire stack over to tower <span class="arithmatex">\(C\)</span> (with the order preserved). 
+A move consists of removing a disk from the top of the stack on one of the towers and placing it on top of a stack on another tower, with the restriction that a disk can only be placed on top of a disk larger than itself.</p>
+<p>The standard recursive solution is to realise that, if we have a way to move the top <span class="arithmatex">\(n-1\)</span> disks from one tower to another, we can do this from tower <span class="arithmatex">\(A\)</span> to tower <span class="arithmatex">\(B\)</span>, and then we can simply move the largest disk from tower <span class="arithmatex">\(A\)</span> to the (currently empty) tower <span class="arithmatex">\(C\)</span>, before moving the <span class="arithmatex">\(n-1\)</span> disks from tower <span class="arithmatex">\(B\)</span> over to tower <span class="arithmatex">\(C\)</span> and the puzzle is solved.
+This amounts to solving an $n-1-disk puzzle (from <span class="arithmatex">\(A\)</span> to <span class="arithmatex">\(B\)</span>), moving one disk (from <span class="arithmatex">\(A\)</span> to <span class="arithmatex">\(C\)</span>) and then solving the an $n-1-disk puzzle (from <span class="arithmatex">\(B\)</span> to <span class="arithmatex">\(C\)</span>).
+With a <span class="arithmatex">\(1\)</span>-disk base case (simply moving the disk from its start to its finisn), the puzzle is now solved recursively.</p>
+<p>After setting up an explicit <code>Stack</code> data-structure
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-0-10">10</a></span>
+<span class="normal"><a href="#__codelineno-0-11">11</a></span>
+<span class="normal"><a href="#__codelineno-0-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="k">class</span> <span class="nc">Stack</span><span class="p">():</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_container</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a>    <span class="k">def</span> <span class="nf">push</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_container</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a>    <span class="k">def</span> <span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_container</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10"></a>
+<a id="__codelineno-0-11" name="__codelineno-0-11"></a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12"></a>        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_container</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+which is to be filled in ascending order with
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
+<span class="normal"><a href="#__codelineno-1-2">2</a></span>
+<span class="normal"><a href="#__codelineno-1-3">3</a></span>
+<span class="normal"><a href="#__codelineno-1-4">4</a></span>
+<span class="normal"><a href="#__codelineno-1-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="n">tower_a</span> <span class="o">=</span> <span class="n">Stack</span><span class="p">()</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="n">tower_b</span> <span class="o">=</span> <span class="n">Stack</span><span class="p">()</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="n">tower_c</span> <span class="o">=</span> <span class="n">Stack</span><span class="p">()</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_discs</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a>    <span class="n">tower_a</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+(where <span class="arithmatex">\(1\)</span> represents the largest disk, <span class="arithmatex">\(2\)</span> the next largest, and so on) Kopec presents a simple implementation of the recursive solution as
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-2-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-2-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-2-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-2-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-2-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-2-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-2-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-2-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-2-10">10</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="k">def</span> <span class="nf">hanoi</span><span class="p">(</span><span class="n">begin</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a>    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a>        <span class="n">end</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">begin</span><span class="o">.</span><span class="n">pop</span><span class="p">())</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a>        <span class="n">hanoi</span><span class="p">(</span><span class="n">begin</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6"></a>        <span class="n">hanoi</span><span class="p">(</span><span class="n">begin</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7"></a>        <span class="n">hanoi</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">begin</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8"></a>
+<a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="c1">#solve with:</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10"></a><span class="n">hanoi</span><span class="p">(</span><span class="n">tower_a</span><span class="p">,</span> <span class="n">tower_c</span><span class="p">,</span> <span class="n">tower_b</span><span class="p">,</span> <span class="n">num_discs</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+This is a very intuitive solution, and it works well. 
+However, Python is not particularly well-suited to recursion.
+Unlike many other languages, Python doesn't perform any kind of recursion optimization.
+Indeed, if you go <em>too</em> deep with recursion, Python will raise a <code>RecursionError</code> and the program will terminate.
+So, I decided to figure out how to write a Hanoi solver that avoids recursion altogether.</p>
+<p>While there would be a number of ways to solve the Tower of Hanoi puzzle without recursion, one interesting approach is to literally implement the recursive version... but without recursion.
+To do this, it is necessary to explicitly maintain your own function stack, instead of relying on Python's function stakc through recursive calls.
+I did this by simply reusing the <code>Stack</code> data-structure already defined.</p>
+<p>I present my solution below, with comments to explain what each part does in relation to the standard recursive version.
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-3-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-3-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-3-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-3-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-3-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-3-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-3-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-3-10">10</a></span>
+<span class="normal"><a href="#__codelineno-3-11">11</a></span>
+<span class="normal"><a href="#__codelineno-3-12">12</a></span>
+<span class="normal"><a href="#__codelineno-3-13">13</a></span>
+<span class="normal"><a href="#__codelineno-3-14">14</a></span>
+<span class="normal"><a href="#__codelineno-3-15">15</a></span>
+<span class="normal"><a href="#__codelineno-3-16">16</a></span>
+<span class="normal"><a href="#__codelineno-3-17">17</a></span>
+<span class="normal"><a href="#__codelineno-3-18">18</a></span>
+<span class="normal"><a href="#__codelineno-3-19">19</a></span>
+<span class="normal"><a href="#__codelineno-3-20">20</a></span>
+<span class="normal"><a href="#__codelineno-3-21">21</a></span>
+<span class="normal"><a href="#__codelineno-3-22">22</a></span>
+<span class="normal"><a href="#__codelineno-3-23">23</a></span>
+<span class="normal"><a href="#__codelineno-3-24">24</a></span>
+<span class="normal"><a href="#__codelineno-3-25">25</a></span>
+<span class="normal"><a href="#__codelineno-3-26">26</a></span>
+<span class="normal"><a href="#__codelineno-3-27">27</a></span>
+<span class="normal"><a href="#__codelineno-3-28">28</a></span>
+<span class="normal"><a href="#__codelineno-3-29">29</a></span>
+<span class="normal"><a href="#__codelineno-3-30">30</a></span>
+<span class="normal"><a href="#__codelineno-3-31">31</a></span>
+<span class="normal"><a href="#__codelineno-3-32">32</a></span>
+<span class="normal"><a href="#__codelineno-3-33">33</a></span>
+<span class="normal"><a href="#__codelineno-3-34">34</a></span>
+<span class="normal"><a href="#__codelineno-3-35">35</a></span>
+<span class="normal"><a href="#__codelineno-3-36">36</a></span>
+<span class="normal"><a href="#__codelineno-3-37">37</a></span>
+<span class="normal"><a href="#__codelineno-3-38">38</a></span>
+<span class="normal"><a href="#__codelineno-3-39">39</a></span>
+<span class="normal"><a href="#__codelineno-3-40">40</a></span>
+<span class="normal"><a href="#__codelineno-3-41">41</a></span>
+<span class="normal"><a href="#__codelineno-3-42">42</a></span>
+<span class="normal"><a href="#__codelineno-3-43">43</a></span>
+<span class="normal"><a href="#__codelineno-3-44">44</a></span>
+<span class="normal"><a href="#__codelineno-3-45">45</a></span>
+<span class="normal"><a href="#__codelineno-3-46">46</a></span>
+<span class="normal"><a href="#__codelineno-3-47">47</a></span>
+<span class="normal"><a href="#__codelineno-3-48">48</a></span>
+<span class="normal"><a href="#__codelineno-3-49">49</a></span>
+<span class="normal"><a href="#__codelineno-3-50">50</a></span>
+<span class="normal"><a href="#__codelineno-3-51">51</a></span>
+<span class="normal"><a href="#__codelineno-3-52">52</a></span>
+<span class="normal"><a href="#__codelineno-3-53">53</a></span>
+<span class="normal"><a href="#__codelineno-3-54">54</a></span>
+<span class="normal"><a href="#__codelineno-3-55">55</a></span>
+<span class="normal"><a href="#__codelineno-3-56">56</a></span>
+<span class="normal"><a href="#__codelineno-3-57">57</a></span>
+<span class="normal"><a href="#__codelineno-3-58">58</a></span>
+<span class="normal"><a href="#__codelineno-3-59">59</a></span>
+<span class="normal"><a href="#__codelineno-3-60">60</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="k">def</span> <span class="nf">hanoi_nonrecursive</span><span class="p">(</span><span class="n">begin</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="sd">    3-tower hanoi solver with explicit stack to avoid recursion</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5"></a>    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="c1"># solve the base case in the same way as before</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6"></a>        <span class="n">end</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">begin</span><span class="o">.</span><span class="n">pop</span><span class="p">())</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7"></a>        <span class="k">return</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8"></a>
+<a id="__codelineno-3-9" name="__codelineno-3-9"></a>    <span class="n">recursion_stack</span> <span class="o">=</span> <span class="n">Stack</span><span class="p">()</span> <span class="c1"># use own function stack</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10"></a>
+<a id="__codelineno-3-11" name="__codelineno-3-11"></a>    <span class="c1">#  add the original call to the stack:</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12"></a>    <span class="n">recursion_stack</span><span class="o">.</span><span class="n">push</span><span class="p">((</span><span class="n">begin</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> 
+<a id="__codelineno-3-13" name="__codelineno-3-13"></a>    <span class="c1"># the final element of the tuple is a &#39;position&#39; integer that records </span>
+<a id="__codelineno-3-14" name="__codelineno-3-14"></a>    <span class="c1"># whether we are before or after the first recursive call:</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15"></a>    <span class="c1"># </span>
+<a id="__codelineno-3-16" name="__codelineno-3-16"></a>    <span class="c1"># positions:</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17"></a>    <span class="c1">#  - 0: before first recursive call</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18"></a>    <span class="c1">#  - 1: after first recursive call</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19"></a>
+<a id="__codelineno-3-20" name="__codelineno-3-20"></a>    <span class="c1"># while loop iterates while there are still calls on the stack</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21"></a>    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">recursion_stack</span><span class="o">.</span><span class="n">_container</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> 
+<a id="__codelineno-3-22" name="__codelineno-3-22"></a>
+<a id="__codelineno-3-23" name="__codelineno-3-23"></a>        <span class="c1"># get the latest call from the stack:</span>
+<a id="__codelineno-3-24" name="__codelineno-3-24"></a>        <span class="n">begin_curr</span><span class="p">,</span> <span class="n">end_curr</span><span class="p">,</span> <span class="n">temp_curr</span><span class="p">,</span> <span class="n">n_curr</span><span class="p">,</span> <span class="n">position</span> <span class="o">=</span> \
+<a id="__codelineno-3-25" name="__codelineno-3-25"></a>            <span class="n">recursion_stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+<a id="__codelineno-3-26" name="__codelineno-3-26"></a>
+<a id="__codelineno-3-27" name="__codelineno-3-27"></a>        <span class="k">if</span> <span class="n">position</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># before the first recursive call? If so, then...</span>
+<a id="__codelineno-3-28" name="__codelineno-3-28"></a>
+<a id="__codelineno-3-29" name="__codelineno-3-29"></a>            <span class="c1">#...add that call back to the stack with updated position:</span>
+<a id="__codelineno-3-30" name="__codelineno-3-30"></a>            <span class="n">recursion_stack</span><span class="o">.</span><span class="n">push</span><span class="p">(</span>\
+<a id="__codelineno-3-31" name="__codelineno-3-31"></a>                <span class="p">(</span><span class="n">begin_curr</span><span class="p">,</span> <span class="n">end_curr</span><span class="p">,</span> <span class="n">temp_curr</span><span class="p">,</span> <span class="n">n_curr</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-3-32" name="__codelineno-3-32"></a>            <span class="p">)</span>
+<a id="__codelineno-3-33" name="__codelineno-3-33"></a>            <span class="c1"># and then either...</span>
+<a id="__codelineno-3-34" name="__codelineno-3-34"></a>            <span class="k">if</span> <span class="n">n_curr</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+<a id="__codelineno-3-35" name="__codelineno-3-35"></a>                <span class="c1">#...solve the first n_curr-1 call directly if n_curr-1 == 1:</span>
+<a id="__codelineno-3-36" name="__codelineno-3-36"></a>                <span class="n">temp_curr</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">begin_curr</span><span class="o">.</span><span class="n">pop</span><span class="p">())</span>
+<a id="__codelineno-3-37" name="__codelineno-3-37"></a>            <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-3-38" name="__codelineno-3-38"></a>                <span class="c1">#...or otherwise add the n_curr-1 call to the stack</span>
+<a id="__codelineno-3-39" name="__codelineno-3-39"></a>                <span class="n">recursion_stack</span><span class="o">.</span><span class="n">push</span><span class="p">(</span>\
+<a id="__codelineno-3-40" name="__codelineno-3-40"></a>                    <span class="p">(</span><span class="n">begin_curr</span><span class="p">,</span> <span class="n">temp_curr</span><span class="p">,</span> <span class="n">end_curr</span><span class="p">,</span> <span class="n">n_curr</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-3-41" name="__codelineno-3-41"></a>                <span class="p">)</span>
+<a id="__codelineno-3-42" name="__codelineno-3-42"></a>
+<a id="__codelineno-3-43" name="__codelineno-3-43"></a>        <span class="c1"># after the first recursive call? If so, then... </span>
+<a id="__codelineno-3-44" name="__codelineno-3-44"></a>        <span class="k">elif</span> <span class="n">position</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+<a id="__codelineno-3-45" name="__codelineno-3-45"></a>
+<a id="__codelineno-3-46" name="__codelineno-3-46"></a>            <span class="c1"># no need to put current call back on stack, we just...</span>
+<a id="__codelineno-3-47" name="__codelineno-3-47"></a>            <span class="c1"># ...move the 1 remaining disk from the start to the end</span>
+<a id="__codelineno-3-48" name="__codelineno-3-48"></a>            <span class="n">end_curr</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">begin_curr</span><span class="o">.</span><span class="n">pop</span><span class="p">())</span> 
+<a id="__codelineno-3-49" name="__codelineno-3-49"></a>            <span class="c1"># and then either...</span>
+<a id="__codelineno-3-50" name="__codelineno-3-50"></a>
+<a id="__codelineno-3-51" name="__codelineno-3-51"></a>            <span class="k">if</span> <span class="n">n_curr</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+<a id="__codelineno-3-52" name="__codelineno-3-52"></a>                <span class="c1">#...solve the first n_curr-1 call directly if n_curr-1 == 1:</span>
+<a id="__codelineno-3-53" name="__codelineno-3-53"></a>                <span class="n">end_curr</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">temp_curr</span><span class="o">.</span><span class="n">pop</span><span class="p">())</span>
+<a id="__codelineno-3-54" name="__codelineno-3-54"></a>            <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-3-55" name="__codelineno-3-55"></a>                <span class="c1">#....or otherwise add the n_curr-1 call to the stack</span>
+<a id="__codelineno-3-56" name="__codelineno-3-56"></a>                <span class="n">recursion_stack</span><span class="o">.</span><span class="n">push</span><span class="p">((</span>\
+<a id="__codelineno-3-57" name="__codelineno-3-57"></a>                    <span class="n">temp_curr</span><span class="p">,</span> <span class="n">end_curr</span><span class="p">,</span> <span class="n">begin_curr</span><span class="p">,</span> <span class="n">n_curr</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-3-58" name="__codelineno-3-58"></a>                <span class="p">)</span>
+<a id="__codelineno-3-59" name="__codelineno-3-59"></a>    <span class="c1"># once recursion_stack is empty, we are done!</span>
+<a id="__codelineno-3-60" name="__codelineno-3-60"></a>    <span class="k">return</span>
+</code></pre></div></td></tr></table></div></p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy"], "search": "../../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.51d95adb.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
