@@ -1,6 +1,6 @@
 # **Adam Callison** 
 
-<img src="images/1581281933076.jpeg" alt="Photograph of Adam Callison" width="250", align="right"/>
+<img src="images/me.png" alt="Photograph of Adam Callison" width="250", align="right"/>
 
 I am currently a post-doctoral researcher in the field of Quantum Computing at University College London.
 My current research is focused on gate-based quantum algorithms for classical optimization problems.
