@@ -10,13 +10,17 @@ This includes many useful libraries, such as *NumPy*, *SciPy*, *pandas* and *mat
 
 ## **Python**
 [Computer Science Problems](https://github.com/adamcallison/ComputerScienceProblems)  
-An in-progress repo in which I am completing the exercises from David Kopec's *Classic Computer Science Problems in Python*
+An in-progress repo in which I am completing the exercises from David Kopec's *Classic Computer Science Problems in Python*.
+I am using this to improve my general programming skills and my use of pytest
 
 [QAOAtools](https://github.com/adamcallison/qaoatools)  
 A work-in-progress set of tools for simulating the Quantum Approximate Optimization Algorithm at an abstract level
 
 [QAE2](https://github.com/adamcallison/qae2)  
-A work-in-progress set of tools for simulating the Maximum-Likelihood Quantum Amplitudes Estimation at an abstract level
+A work-in-progress set of tools for simulating the Maximum-Likelihood Quantum Amplitudes Estimation at an abstract level (now with some circuit-based simulation tools implemented via Qiskit)
+
+[CCPCrys](https://github.com/adamcallison/ccpcrys)
+An in-progress repo for building a quantum annealing problem Hamiltonian for a new approach to the phasing problem in macromolecular crystallography that I am currently researching.
 
 [More](https://github.com/adamcallison)  
 My GitHub is available at [https://github.com/adamcallison](https://github.com/adamcallison)
@@ -26,7 +30,7 @@ My GitHub is available at [https://github.com/adamcallison](https://github.com/a
 I have a number of academic publications. See my [publications page](publications) for a full list.
 
 ## **Currently Reading**
-* *A Song of Ice and Fire: A Clash of Kings* - George R. R. Martin
+* *Recursion* - Blake Crouch
 * *Classic Computer Science Problems in Python* - David Kopec
 
 ## **Links**
