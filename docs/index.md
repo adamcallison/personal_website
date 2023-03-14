@@ -30,7 +30,7 @@ My GitHub is available at [https://github.com/adamcallison](https://github.com/a
 I have a number of academic publications. See my [publications page](publications) for a full list.
 
 ## **Currently Reading**
-* *Recursion* - Blake Crouch
+* *If This Book Exists, You're in the Wrong Universe* - Jason Pargin
 * *Classic Computer Science Problems in Python* - David Kopec
 
 ## **Links**
